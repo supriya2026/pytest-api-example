@@ -26,7 +26,7 @@ TODO: Finish this test by...
 3) Validate the 'status' property in the response is equal to the expected status
 4) Validate the schema for each object in the response
 '''
-@pytest.mark.parametrize("status", [("available")])
+@pytest.mark.parametrize("status", [("available", "sold", "pending")])
 def test_find_by_status_200(status):
     test_endpoint = "/pets/findByStatus"
     params = {
@@ -34,6 +34,12 @@ def test_find_by_status_200(status):
     }
 
     response = api_helpers.get_api_data(test_endpoint, params)
+    assert response.status_code == 200
+    res_data = response.json()
+    for pet in res_data:
+        assert pet.get("status") == status #status validation
+    for pet in res_data:
+        validate(instance=pet, schema=schemas.pet) # validate schema for each object
     # TODO...
 
 '''
@@ -41,6 +47,20 @@ TODO: Finish this test by...
 1) Testing and validating the appropriate 404 response for /pets/{pet_id}
 2) Parameterizing the test for any edge cases
 '''
-def test_get_by_id_404():
+@pytest.mark.parametrize("pet_id",["xyz",  #string
+                                   -1,   #-ve
+                                    "$",  #spl.char
+                                    "",   #empty
+                                   "@11"
+                                   ])
+def test_get_by_id_404(pet_id):
     # TODO...
+    endpoint= "/pets/{pet_id}"
+    res = api_helpers.get_api_data(endpoint)
+
+    assert res.status_code == 404,f"Expected 404 , got {res.status_code}"
+
+
+
+
     pass

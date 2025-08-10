@@ -1,3 +1,5 @@
+import uuid
+
 from jsonschema import validate
 import pytest
 import schemas
@@ -12,5 +14,20 @@ TODO: Finish this test by...
 3) Validate the response codes and values
 4) Validate the response message "Order and pet status updated successfully"
 '''
-def test_patch_order_by_id():
+@pytest.mark.parametrize("order_id , payload" , [(101, {"order_status": "shipped", "pet_staus" : "sold"})])
+def test_patch_order_by_id(order_id, payload):
     pass
+    test_endpoint_patch = "/store/order/{order_id}"
+    res = api_helpers.patch_api_data(test_endpoint_patch, payload)
+    assert res.status_code == 200
+    validate(instance=res.json(), schema=schemas.pet)
+    return res
+    expected_msg = "Order and pet status updated successfully"
+    assert_that(res.json(), contains_string(expected_msg))
+
+
+
+
+
+
+

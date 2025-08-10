@@ -47,7 +47,9 @@ pets = [
     }
 ]
 
-orders = {}
+orders = [{ 'id' : 101, 'pet_id': 0},
+          { 'id' : 102, 'pet_id': 1},
+          { 'id' : 103, 'pet_id': 2}]
 
 '''
 Pet Namespace
